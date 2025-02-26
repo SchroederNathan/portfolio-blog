@@ -11,11 +11,25 @@ export const metadata: Metadata = {
     default: 'Nathan Schroeder - Software developer',
   },
   description:
-    'I’m Nathan, a software developer based in Windsor, Ontario. I create intuitive and efficient software solutions.',
+    "I'm Nathan, a software developer based in Windsor, Ontario. I create intuitive and efficient software solutions.",
   alternates: {
     types: {
       'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
     },
+  },
+  openGraph: {
+    images: [
+      {
+        url: '/images/metadata-preview.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Nathan Schroeder',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/images/metadata-preview.jpg'],
   },
 }
 
