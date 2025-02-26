@@ -1,10 +1,64 @@
-import { GridPattern } from '@/components/GridPattern'
+import { useId } from 'react'
+
+function GridPattern({
+  width,
+  height,
+  x,
+  y,
+  squares,
+  ...props
+}: React.ComponentPropsWithoutRef<'svg'> & {
+  width: number
+  height: number
+  x: string | number
+  y: string | number
+  squares: Array<[x: number, y: number]>
+}) {
+  let patternId = useId()
+
+  return (
+    <svg aria-hidden="true" {...props}>
+      <defs>
+        <pattern
+          id={patternId}
+          width={width}
+          height={height}
+          patternUnits="userSpaceOnUse"
+          x={x}
+          y={y}
+        >
+          <path d={`M.5 ${height}V.5H${width}`} fill="none" />
+        </pattern>
+      </defs>
+      <rect
+        width="100%"
+        height="100%"
+        strokeWidth={0}
+        fill={`url(#${patternId})`}
+      />
+      {squares && (
+        <svg x={x} y={y} className="overflow-visible">
+          {squares.map(([x, y]) => (
+            <rect
+              strokeWidth="0"
+              key={`${x}-${y}`}
+              width={width + 1}
+              height={height + 1}
+              x={x * width}
+              y={y * height}
+            />
+          ))}
+        </svg>
+      )}
+    </svg>
+  )
+}
 
 export function HeroPattern() {
   return (
     <div className="absolute inset-0 -z-10 mx-0 max-w-none overflow-hidden">
       <div className="absolute top-0 left-1/2 ml-[-38rem] h-[25rem] w-[81.25rem] dark:[mask-image:linear-gradient(white,transparent)]">
-        <div className="absolute inset-0 bg-linear-to-r from-primary to-secondary opacity-40 [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:from-primary/10 dark:to-secondary/30 dark:opacity-40">
+        <div className="from-primary to-secondary dark:from-primary/10 dark:to-secondary/30 absolute inset-0 bg-linear-to-r opacity-40 [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:opacity-40">
           <GridPattern
             width={72}
             height={56}
