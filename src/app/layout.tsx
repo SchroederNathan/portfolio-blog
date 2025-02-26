@@ -8,8 +8,7 @@ import '@/styles/tailwind.css'
 export const metadata: Metadata = {
   title: {
     template: '%s - Nathan Schroeder',
-    default:
-      'Nathan Schroeder - Software developer',
+    default: 'Nathan Schroeder - Software developer',
   },
   description:
     'I’m Nathan, a software developer based in Windsor, Ontario. I create intuitive and efficient software solutions.',
