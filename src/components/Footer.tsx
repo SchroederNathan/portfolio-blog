@@ -29,8 +29,8 @@ export function Footer() {
               <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm font-medium text-zinc-800 dark:text-zinc-200">
                 <NavLink href="/">Home</NavLink>
                 <a href="https://nathanschroeder.dev">Portfolio</a>
-                <a href="https://github.com/nathan-schroeder">Github</a>
-                <a href="https://www.linkedin.com/in/nathan-schroeder-94414119a/">LinkedIn</a>
+                <a href="https://github.com/SchroederNathan">Github</a>
+                <a href="https://www.linkedin.com/in/nathan-schroeder-a40aa2210">LinkedIn</a>
               </div>
               <p className="text-sm text-zinc-400 dark:text-zinc-500">
                 &copy; {new Date().getFullYear()} Nathan Schroeder. All rights
