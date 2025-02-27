@@ -1,8 +1,9 @@
 import { ArticleLayout } from '@/components/ArticleLayout'
 import { prisma } from '@/lib/prisma'
-import { MDXRemote } from 'next-mdx-remote'
 import { serialize } from 'next-mdx-remote/serialize'
 import { notFound } from 'next/navigation'
+import remarkGfm from 'remark-gfm'
+import MDXContent from '@/components/MDXContent'
 
 export async function generateMetadata({
   params,
@@ -37,21 +38,32 @@ export default async function ArticlePage({
     notFound()
   }
 
-  // Serialize the MDX content
-  const mdxSource = await serialize(article.content)
+  try {
+    // Serialize the MDX content with additional options
+    const mdxSource = await serialize(article.content, {
+      mdxOptions: {
+        remarkPlugins: [remarkGfm],
+        development: false,
+      },
+      // Don't try to parse frontmatter
+      parseFrontmatter: false,
+    })
 
-  // Create an article object that matches the expected format
-  const articleData = {
-    slug: article.slug,
-    title: article.title,
-    description: article.description,
-    author: article.author,
-    date: article.date.toISOString(),
+    return (
+      <ArticleLayout article={article}>
+        <MDXContent source={mdxSource} />
+      </ArticleLayout>
+    )
+  } catch (error) {
+    console.error('Error serializing MDX:', error)
+    
+    // Fallback to rendering the content as plain text if MDX parsing fails
+    return (
+      <ArticleLayout article={article}>
+        <div className="prose dark:prose-invert whitespace-pre-wrap">
+          {article.content}
+        </div>
+      </ArticleLayout>
+    )
   }
-
-  return (
-    <ArticleLayout article={articleData}>
-      <MDXRemote {...mdxSource} />
-    </ArticleLayout>
-  )
 }

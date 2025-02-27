@@ -33,11 +33,12 @@ export function ArticleLayout({
   let { previousPathname } = useContext(AppContext)
 
   // Convert date string to Date object if it's not already
-  const dateValue = typeof article.date === 'string' 
-    ? article.date 
-    : article.date instanceof Date 
-      ? article.date.toISOString()
-      : String(article.date); // Convert to string explicitly
+  const dateValue =
+    typeof article.date === 'string'
+      ? article.date
+      : article.date instanceof Date
+        ? article.date.toISOString()
+        : String(article.date) // Convert to string explicitly
 
   return (
     <Container className="mt-16 lg:mt-32">
@@ -63,14 +64,12 @@ export function ArticleLayout({
                 className="order-first flex items-center text-base text-zinc-400 dark:text-zinc-500"
               >
                 <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500" />
-                <span className="ml-3">
-                  {formatDate(dateValue)}
-                </span>
+                <span className="ml-3">{formatDate(dateValue)}</span>
               </time>
             </header>
-            {/* <Prose className="mt-8" data-mdx-content>
+            <Prose className="mt-8" data-mdx-content>
               {children}
-            </Prose> */}
+            </Prose>
           </article>
         </div>
       </div>
