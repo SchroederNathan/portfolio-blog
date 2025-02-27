@@ -2,8 +2,8 @@ import { type Metadata } from 'next'
 
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
+import { getAllArticles } from '@/lib/articles'
 import { formatDate } from '@/lib/formatDate'
-import { prisma } from '@/lib/prisma'
 import { Article } from '@prisma/client'
 
 function ArticleCard({ article }: { article: Article }) {
@@ -40,28 +40,18 @@ export const metadata: Metadata = {
 }
 
 export default async function ArticlesIndex() {
-  // let articles = await getAllArticles()
-  const response = await prisma.article.findMany({
-    orderBy: {
-      date: 'desc',
-    },
-    include: {
-      images: true,
-    },
-  })
+  
+  const response = await getAllArticles()
   const articles = response.map((article) => ({
     ...article,
     slug: article.slug,
   }))
-
-  console.log('Transformed articles:', articles)
 
   return (
     <SimpleLayout
       title="Writing about my thoughts, experiences, and insights while building cool stuff ✍️"
       intro="Welcome to my blog where I share my thoughts, experiences, and insights about technology, life, and everything in between."
     >
-      {/* <CreateMockData /> */}
 
       <div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
         <div className="flex max-w-3xl flex-col space-y-16">

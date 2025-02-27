@@ -1,37 +1,46 @@
-import glob from 'fast-glob'
-
-interface Article {
-  title: string
-  description: string
-  author: string
-  date: string
-  content: string
-}
+import { Article } from '@prisma/client'
+import { prisma } from './prisma'
 
 export interface ArticleWithSlug extends Article {
   slug: string
 }
 
-async function importArticle(
-  articleFilename: string,
-): Promise<ArticleWithSlug> {
-  let { article } = (await import(`../app/${articleFilename}`)) as {
-    default: React.ComponentType
-    article: Article
+export async function getAllArticles(): Promise<ArticleWithSlug[]> {
+  const articles = await prisma.article.findMany({
+    orderBy: {
+      date: 'desc',
+    },
+    include: {
+      images: true,
+    },
+  })
+
+  // Transform the articles to ensure they match the ArticleWithSlug interface
+  return articles.map((article) => ({
+    ...article,
+    // Ensure slug is included (it already is in your schema, but this makes TypeScript happy)
+    slug: article.slug,
+  }))
+}
+
+export async function getArticleBySlug(
+  slug: string,
+): Promise<ArticleWithSlug | null> {
+  const article = await prisma.article.findUnique({
+    where: {
+      slug,
+    },
+    include: {
+      images: true,
+    },
+  })
+
+  if (!article) {
+    return null
   }
 
   return {
-    slug: articleFilename.replace(/(\/page)?\.mdx$/, ''),
     ...article,
+    slug: article.slug,
   }
-}
-
-export async function getAllArticles() {
-  let articleFilenames = await glob('*/page.mdx', {
-    cwd: './src/app',
-  })
-
-  let articles = await Promise.all(articleFilenames.map(importArticle))
-
-  return articles.sort((a, z) => +new Date(z.date) - +new Date(a.date))
 }
