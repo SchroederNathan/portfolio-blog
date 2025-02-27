@@ -1,0 +1,35 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Article {
+    id          Int      @id @default(autoincrement())
+    slug        String   @unique
+    title       String
+    description String
+    author      String
+    date        DateTime
+    content     String   @db.Text
+    images      Image[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@index([date])
+}
+
+model Image {
+    id        Int      @id @default(autoincrement())
+    filename  String
+    alt       String?
+    article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+    articleId Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([articleId, filename])
+}
