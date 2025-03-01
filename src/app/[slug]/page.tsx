@@ -4,6 +4,7 @@ import { serialize } from 'next-mdx-remote/serialize'
 import { notFound } from 'next/navigation'
 import remarkGfm from 'remark-gfm'
 import MDXContent from '@/components/MDXContent'
+import rehypePrism from '@mapbox/rehype-prism'
 
 export async function generateMetadata({
   params,
@@ -43,6 +44,7 @@ export default async function ArticlePage({
     const mdxSource = await serialize(article.content, {
       mdxOptions: {
         remarkPlugins: [remarkGfm],
+        rehypePlugins: [[rehypePrism, {}] as any],
         development: false,
       },
       // Don't try to parse frontmatter
