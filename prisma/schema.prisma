@@ -14,6 +14,7 @@ model Article {
     description String
     author      String
     date        DateTime
+    draft       Boolean  @default(true)
     content     String   @db.Text
     images      Image[]
     createdAt   DateTime @default(now())
