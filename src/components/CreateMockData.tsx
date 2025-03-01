@@ -1,4 +1,5 @@
 'use client'
+import { prisma } from '@/lib/prisma'
 import { useState } from 'react'
 import { Button } from './Button'
 
@@ -11,30 +12,20 @@ const CreateMockData = () => {
   const createMockArticle = async () => {
     setIsCreating(true)
     try {
-      const response = await fetch('/api/createarticle', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: title,
-          description: description,
+      const article = await prisma.article.create({
+        data: {
+          title,
+          description,
           author: 'Nathan Schroeder',
-          date: new Date().toISOString(),
-          content: content,
+          date: new Date(),
+          content,
           draft: true,
           slug: title.toLowerCase().replace(/ /g, '-'),
-        }),
+        },
       })
 
-      if (response.ok) {
-        console.log('Mock data created successfully')
-        alert('Mock article created successfully!')
-      } else {
-        const error = await response.json()
-        console.error('Failed to create mock data:', error)
-        alert(`Failed to create mock data: ${error.error || 'Unknown error'}`)
-      }
+      console.log('Mock data created successfully')
+      alert('Mock article created successfully!')
     } catch (error) {
       console.error('Error creating mock data:', error)
       alert(
