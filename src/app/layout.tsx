@@ -43,10 +43,11 @@ export default function RootLayout({
       <body className="flex h-full bg-zinc-50 dark:bg-zinc-950">
         <Providers>
           <div className="flex w-full">
-            <Analytics />
             <Layout>{children}</Layout>
           </div>
         </Providers>
+        <Analytics />
+
       </body>
     </html>
   )
