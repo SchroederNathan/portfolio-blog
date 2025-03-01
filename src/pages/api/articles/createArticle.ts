@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -11,18 +11,20 @@ export default async function handler(
 
   try {
     const body = req.body
-    
+
     const { title, description, author, date, content, slug } = body
-    
+
     // Check if an article with this slug already exists
     const existingArticle = await prisma.article.findUnique({
-      where: { slug }
+      where: { slug },
     })
-    
+
     if (existingArticle) {
-      return res.status(409).json({ error: 'An article with this slug already exists' })
+      return res
+        .status(409)
+        .json({ error: 'An article with this slug already exists' })
     }
-    
+
     // Create the new article
     const article = await prisma.article.create({
       data: {
@@ -31,10 +33,10 @@ export default async function handler(
         author,
         date: new Date(date),
         content,
-        slug
-      }
+        slug,
+      },
     })
-    
+
     return res.status(201).json(article)
   } catch (error) {
     console.error('Error creating article:', error)

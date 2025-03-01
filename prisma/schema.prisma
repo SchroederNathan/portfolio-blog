@@ -13,6 +13,7 @@ model Article {
     title       String
     description String
     author      String
+    viewCount   Int      @default(0)
     date        DateTime
     draft       Boolean  @default(true)
     content     String   @db.Text
