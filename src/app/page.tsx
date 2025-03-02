@@ -6,6 +6,7 @@ import { getAllArticles } from '@/lib/articles'
 import { formatDate } from '@/lib/formatDate'
 import { Article } from '@prisma/client'
 import CreateMockData from '@/components/CreateMockData'
+import EditArticle from '@/components/EditArticle'
 
 function ArticleCard({ article }: { article: Article }) {
   return (
@@ -54,7 +55,8 @@ export default async function ArticlesIndex() {
       title="Writing about my thoughts, experiences, and insights while building cool stuff ✍️"
       intro="Welcome to my blog where I share my thoughts, experiences, and insights about technology, life, and everything in between."
     >
-      <CreateMockData />
+      {/* <CreateMockData /> */}
+
       <div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
         <div className="flex max-w-3xl flex-col space-y-16">
           {articles.map((article) => (

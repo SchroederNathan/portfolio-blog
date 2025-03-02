@@ -8,9 +8,9 @@ import { Container } from '@/components/Container'
 import { ViewTracker } from '@/components/ViewTracker'
 import { formatDate } from '@/lib/formatDate'
 import { Article } from '@prisma/client'
-import Image from 'next/image'
 import { Prose } from './Prose'
-
+;import EditArticle from './EditArticle'
+``
 function ArrowLeftIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
@@ -104,22 +104,13 @@ export function ArticleLayout({
               </div>
             </header>
 
-            {/* {article.images.length > 0 && (
-              <Image
-                src={article.images[0]}
-                alt={article.title}
-                width={1000}
-                height={1000}
-                className="w-full rounded-3xl"
-              />
-            )} */}
-
             <Prose className="mt-8" data-mdx-content>
               {children}
             </Prose>
           </article>
         </div>
       </div>
+      <EditArticle article={article} />
     </Container>
   )
 }
