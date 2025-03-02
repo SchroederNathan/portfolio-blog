@@ -110,7 +110,7 @@ export function ArticleLayout({
           </article>
         </div>
       </div>
-      <EditArticle article={article} />
+      {/* <EditArticle article={article} /> */}
     </Container>
   )
 }
