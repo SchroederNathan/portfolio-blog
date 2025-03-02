@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 export default async function ArticlesIndex() {
   const response = await getAllArticles()
   const articles = response
-    // .filter((article) => article.draft === true)
+    .filter((article) => article.draft === false)
     .map((article) => ({
       ...article,
       slug: article.slug,
