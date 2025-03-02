@@ -9,7 +9,6 @@ import { ViewTracker } from '@/components/ViewTracker'
 import { formatDate } from '@/lib/formatDate'
 import { Article } from '@prisma/client'
 import { Prose } from './Prose'
-;import EditArticle from './EditArticle'
 ``
 function ArrowLeftIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -110,7 +109,7 @@ export function ArticleLayout({
           </article>
         </div>
       </div>
-      <EditArticle article={article} />
+      {/* <EditArticle article={article} /> */}
     </Container>
   )
 }
