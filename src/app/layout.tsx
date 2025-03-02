@@ -27,10 +27,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-  twitter: {
-    card: 'summary_large_imag',
-    images: ['/images/metadata-preview.jpg'],
-  },
 }
 
 export default function RootLayout({
