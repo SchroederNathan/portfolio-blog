@@ -7,7 +7,7 @@ import {
   XIcon,
 } from './icons/SocialIcons'
 
-function SocialLink({
+export function SocialLink({
   icon: Icon,
   ...props
 }: React.ComponentPropsWithoutRef<typeof Link> & {
