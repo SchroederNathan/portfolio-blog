@@ -10,30 +10,18 @@ export default async function handler(
   }
 
   try {
-    const body = req.body
+    const { title, description, content, imageUrl } = req.body
 
-    const { title, description, author, date, content, slug } = body
-
-    // Check if an article with this slug already exists
-    const existingArticle = await prisma.article.findUnique({
-      where: { slug },
-    })
-
-    if (existingArticle) {
-      return res
-        .status(409)
-        .json({ error: 'An article with this slug already exists' })
-    }
-
-    // Create the new article
     const article = await prisma.article.create({
       data: {
         title,
         description,
-        author,
-        date: new Date(date),
+        author: 'Nathan Schroeder',
+        date: new Date(),
         content,
-        slug,
+        draft: true,
+        images: imageUrl ? [imageUrl] : [],
+        slug: title.toLowerCase().replace(/ /g, '-'),
       },
     })
 

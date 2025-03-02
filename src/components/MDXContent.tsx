@@ -6,7 +6,15 @@ import Image from 'next/image'
 
 // Define components that can be used in MDX
 const components = {
-  Image,
+  Image: (props: any) => (
+    <Image
+      {...props}
+      width={1000} // Full width
+      height={1000} // Maintain aspect ratio
+      className="w-full" // Make image fill container width
+      alt={props.alt || ''} // Ensure alt text is provided
+    />
+  ),
   // Add any other components you want to use in your MDX here
 }
 

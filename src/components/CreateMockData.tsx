@@ -1,5 +1,4 @@
 'use client'
-import { prisma } from '@/lib/prisma'
 import { useState } from 'react'
 import { Button } from './Button'
 
@@ -8,24 +7,40 @@ const CreateMockData = () => {
   const [content, setContent] = useState('')
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [imageUrl, setImageUrl] = useState('')
 
   const createMockArticle = async () => {
     setIsCreating(true)
+
     try {
-      const article = await prisma.article.create({
-        data: {
+      const response = await fetch('/api/articles/createArticle', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           title,
           description,
-          author: 'Nathan Schroeder',
-          date: new Date(),
           content,
-          draft: true,
-          slug: title.toLowerCase().replace(/ /g, '-'),
-        },
+          imageUrl,
+        }),
       })
 
+      if (!response.ok) {
+        throw new Error('Failed to create article')
+      }
+
+      const article = await response.json()
       console.log('Mock data created successfully')
       alert('Mock article created successfully!')
+
+      // Clear the form
+      setTitle('')
+      setDescription('')
+      setContent('')
+      setImageUrl('')
+      setSelectedImage(null)
     } catch (error) {
       console.error('Error creating mock data:', error)
       alert(
@@ -33,6 +48,45 @@ const CreateMockData = () => {
       )
     } finally {
       setIsCreating(false)
+    }
+  }
+
+  const createImage = async () => {
+    if (!selectedImage) return
+
+    try {
+      // Get the presigned URL from our API
+      const response = await fetch(
+        `/api/articles/uploadImage?file=${encodeURIComponent(selectedImage.name)}`,
+      )
+      const { url, fields } = await response.json()
+
+      // Create form data with the required fields
+      const formData = new FormData()
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value as string)
+      })
+      formData.append('file', selectedImage)
+
+      // Upload to S3
+      const uploadResponse = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (uploadResponse.ok) {
+        // Construct the final image URL
+        const imageUrl = `${url}/${fields.key}`
+        setImageUrl(imageUrl)
+        alert('Image uploaded successfully!')
+      } else {
+        throw new Error('Failed to upload image')
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      alert(
+        `Error: ${error instanceof Error ? error.message : 'Failed to upload image'}`,
+      )
     }
   }
 
@@ -60,6 +114,25 @@ const CreateMockData = () => {
         rows={10}
         className="mb-4 w-full rounded border-1 border-zinc-700 p-2 text-sm"
       />
+
+      <div className="mb-4">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setSelectedImage(e.target.files?.[0] || null)}
+          className="mb-2 w-full text-sm"
+        />
+        {selectedImage && (
+          <Button onClick={createImage} className="w-full hover:cursor-pointer">
+            Upload Image
+          </Button>
+        )}
+        {imageUrl && (
+          <div className="mt-2 text-sm text-green-600">
+            Image uploaded! URL: {imageUrl}
+          </div>
+        )}
+      </div>
 
       <Button
         onClick={createMockArticle}

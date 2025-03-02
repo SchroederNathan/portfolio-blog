@@ -10,9 +10,6 @@ export async function getAllArticles(): Promise<ArticleWithSlug[]> {
     orderBy: {
       date: 'desc',
     },
-    include: {
-      images: true,
-    },
   })
 
   // Transform the articles to ensure they match the ArticleWithSlug interface
@@ -29,9 +26,6 @@ export async function getArticleBySlug(
   const article = await prisma.article.findUnique({
     where: {
       slug,
-    },
-    include: {
-      images: true,
     },
   })
 

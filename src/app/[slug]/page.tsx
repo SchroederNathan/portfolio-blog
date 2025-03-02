@@ -32,7 +32,6 @@ export default async function ArticlePage({
 }) {
   const article = await prisma.article.findUnique({
     where: { slug: params.slug },
-    include: { images: true },
   })
 
   if (!article) {
