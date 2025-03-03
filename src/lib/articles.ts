@@ -10,6 +10,7 @@ export async function getAllArticles(): Promise<ArticleWithSlug[]> {
     orderBy: {
       date: 'desc',
     },
+    cacheStrategy: { ttl: 60 },
   })
 
   // Transform the articles to ensure they match the ArticleWithSlug interface
@@ -27,6 +28,7 @@ export async function getArticleBySlug(
     where: {
       slug,
     },
+    cacheStrategy: { ttl: 60 },
   })
 
   if (!article) {
