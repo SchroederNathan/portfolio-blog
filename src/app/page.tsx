@@ -50,6 +50,9 @@ export default async function ArticlesIndex() {
       slug: article.slug,
     }))
 
+    console.log(articles)
+
+
   return (
     <SimpleLayout
       title="Writing about my thoughts, experiences, and insights while building cool stuff ✍️"
